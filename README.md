@@ -11,7 +11,7 @@ Copy all the tonies nfc files into one directory on your computer.
 
 ```sh
 pip install -r requirements.txt 
-python tonies_nfc_cconverter.py
+python tonies_nfc_converter.py
 ```
 
 After the start the programm requests two inputs.
