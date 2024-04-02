@@ -3,9 +3,12 @@
 (Python) Tool to convert old nfc tonies files from the flipper zero
 to the current version 4 of the NFC files for SLIX Tags
 
+The Program scans the selected directory and all subdirectories for .nfc files
+
 ## Preparation
 
 Copy all the tonies nfc files into one directory on your computer.
+Subdirectories are possible
 
 ## Usage
 
