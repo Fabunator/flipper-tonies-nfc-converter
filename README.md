@@ -1,4 +1,4 @@
-# Conan Workspace Generator
+# flipper tonies nfc converter
 
 (Python) Tool to convert old nfc tonies files from the flipper zero
 to the current version 4 of the NFC files for SLIX Tags
