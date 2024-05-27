@@ -20,24 +20,33 @@ def extract_uid_and_data_content(file_path):
 
     with open(file_path, 'r', encoding='UTF-8') as nfc_file:
         for line in nfc_file:
-            if line.startswith("#"):
+            if line.startswith("#") or not line.strip():
                 continue
             # Strip newline characters and split the line into key and value
-            key, value = line.strip().split(': ')
-
+            parts = line.strip().split(': ')
+            if len(parts) != 2:
+                continue
+            key, value = parts
             # Check if the line contains the UID or DataContent
             if key == 'UID':
                 uid = value
             elif key == 'Data Content':
                 data_content = value
-
+            
+        if uid and data_content:
             file_content = {'uid': uid, 'data': data_content}
+        else:
+            file_content = {}
 
     return file_content
 
+filetypes = [
+    ("jinja2 template files", "*.jinja2")
+]
+
 root = Tk()
 root.withdraw() # use to hide tkinter window
-template_file = askopenfilename(parent=root, initialdir=currdir, title='Select Template File')
+template_file = askopenfilename(parent=root, initialdir=currdir, title='Select Template File', filetypes=filetypes)
 tonie_file_dir = askdirectory(parent=root, initialdir=currdir, title='Select Tonies Folder')
 
 with open(template_file, encoding='UTF-8') as file_:
@@ -47,12 +56,15 @@ with open(template_file, encoding='UTF-8') as file_:
         count = 0
         for file in files:
             if file.endswith(".nfc"):
-                count += 1
                 file_name = os.path.join(root, file)
                 file_content = extract_uid_and_data_content(file_name)
-                rendered_string = template.render(file_content)
-                new_file = open(file_name, 'w', encoding='UTF-8')
-                new_file.write(rendered_string)
-                new_file.close()
+                if file_content:
+                    count += 1
+                    rendered_string = template.render(file_content)
+                    new_file = open(file_name, 'w', encoding='UTF-8')
+                    new_file.write(rendered_string)
+                    new_file.close()
+                else:
+                    print(f'{file_name} could not be converted uid or data content missing')
         abs_count += count
     print(f"Done converting {abs_count} files")
